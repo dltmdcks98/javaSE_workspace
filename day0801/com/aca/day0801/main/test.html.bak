@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Document</title>
+
+</head>
+<body>
+<pre>
+    <button onClick="move()">날리기</button>
+</pre>
+</body>
+</html>
+
+<script>
+//이 영역이 프로그래밍 언어 .. 오타 없어야함 
+//문서 내에 화살표를 생성하여 등장시키자
+var span = document.createElement("span");
+span.innerText="→";
+span.id="sp";//제어하기 위한 아이디 부여
+span.style.position = "absolute";//절대위치 지정
+span.style.top = 50+"px";//태어나자마자 y =150
+span.style.left = 0+"px"; //태어나자마자 x = 0
+document.body.appendChild(span);
+
+var span1 = document.createElement("span1");
+span1.innerText="→";
+span1.id="sp1";//제어하기 위한 아이디 부여
+span1.style.position = "absolute";//절대위치 지정
+span1.style.top = 100+"px";//태어나자마자 y =150
+span1.style.left = 0+"px"; //태어나자마자 x = 0
+document.body.appendChild(span1);
+
+var span2 = document.createElement("span2");
+span2.innerText="→";
+span2.id="sp2";//제어하기 위한 아이디 부여
+span2.style.position = "absolute";//절대위치 지정
+span2.style.top = 150+"px";//태어나자마자 y =150
+span2.style.left = 0+"px"; //태어나자마자 x = 0
+document.body.appendChild(span2);
+
+
+var x =100;
+//js에서의 함수 정의
+function move(){
+	
+	//문서내에 있는 화살 span을 움직이자(x축을 증가)x,y는 왼쪽 상단이 기준, y가 내려가면 증가,x가 오른쪽으로 가면 증가  
+	//있는것을 가져오는 것 = get
+	var obj = document.getElementById("sp");
+	var obj1 = document.getElementById("sp1");
+	var obj2 = document.getElementById("sp2");
+	x+=10;
+	obj.style.left=x+"px";
+	obj1.style.left=x+10+"px"'
+	obj2.style.left=x+20+"px"'
+
+	setTimeout("move()",100);//1/1000초까지 표현 가능 
+}
+</script>
