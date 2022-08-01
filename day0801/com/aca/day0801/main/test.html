@@ -7,8 +7,7 @@
 </head>
 <body>
 <pre>
-    <button onClick="move()">날리기</button>
-	
+   //<button onClick="move()">날리기</button> 객체를 생성하면 더이상 필요가 없다. -> 메소드를 호출해야함 
 </pre>
 </body>
 </html>
@@ -62,19 +61,35 @@ function move(){
 //현실에 존재하는 화살을 여러개 찍어낼 거푸집 역할을 할  class를 생성 
 class Arrow
 {
-	constructor(y){//자바의 생성자
+	constructor(y,str,velX){//자바의 생성자
 			this.y=y;
+			this.x =100;
+			this.str= str;
+			this.velX = velX;
 			this.span = document.createElement("span");
-			this.span.innerText="→";
-			this.span.id="sp";//제어하기 위한 아이디 부여
+			this.span.innerText=this.str;
 			this.span.style.position = "absolute";//절대위치 지정
 			this.span.style.top = this.y+"px";//태어나자마자 y =150
 			this.span.style.left = 0+"px"; //태어나자마자 x = 0
 			document.body.appendChild(this.span);
 		}
+			
+			//js에서의 함수 정의
+			move(){
+				
+				//문서내에 있는 화살 span을 움직이자(x축을 증가)x,y는 왼쪽 상단이 기준, y가 내려가면 증가,x가 오른쪽으로 가면 증가  
+				//있는것을 가져오는 것 = get
+				this.x+=this.velX;
+				this.span.style.left=this.x+"px";
+				setTimeout(()=>{
+					this.move();
+				},100);//1/1000초까지 표현 가능 
+			}
 }
-new Arrow(200);//class로부터 인스턴스 1개 생성
-new Arrow(250);
-new Arrow(300);
-
+var a1 =new Arrow(200,"☞",10);//class로부터 인스턴스 1개 생성
+var a2 = new Arrow(250,"＆",5);
+var a3 = new Arrow(300,"☆",15);
+a1.move()
+a2.move()
+a3.move()
 </script>
