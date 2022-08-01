@@ -4,6 +4,7 @@ public class Arrow
 	int y;
 	String str;
 	int velX;
+	int x;
 	public Arrow(int y, String str, int velX){
 		this.y=y;
 		this.str = str;
@@ -16,5 +17,6 @@ public class Arrow
 	public static void main(){
 		Arrow a1 = new Arrow(105,"¡Ù",10);
 		a1.move();
+		System.out.println("³¯¸°´Ù.");
 	}
 }
