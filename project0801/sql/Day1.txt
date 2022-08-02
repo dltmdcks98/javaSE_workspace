@@ -1,0 +1,16 @@
+SQL> --테이블 데이터베이스 생성
+SQL> CREATE TABLE SPACE javadb DATAFILE'C:\oraclexe\app\oracle\oradata\XE\javadb.dbf' SIZE 2M;
+CREATE TABLE SPACE javadb DATAFILE'C:\oraclexe\app\oracle\oradata\XE\javadb.dbf' SIZE 2M
+                   *
+ERROR at line 1:
+ORA-00922: missing or invalid option 
+
+
+SQL> CREATE TABLESPACE javadb DATAFILE'C:\oraclexe\app\oracle\oradata\XE\javadb.dbf' SIZE 2M;
+CREATE TABLESPACE javadb DATAFILE'C:\oraclexe\app\oracle\oradata\XE\javadb.dbf' SIZE 2M
+*
+ERROR at line 1:
+ORA-01031: insufficient privileges 
+
+
+SQL> SPOOL off;
