@@ -20,14 +20,14 @@ public class WinTest
 		//버튼과 리스너 연결
 		bt.addActionListener(new MyListener());
 		//텍스트박스와 리스너연결
-		t.addKeyListener(new MyKeyListener());
-
+		t.addKeyListener(new MyKeyListenser());
+	//조립
+		frame.add(bt);
+		frame.add(t);
 		//조립전에 요소들을 어떻게 배치할지를 결정해야함 =>gui에서는 
 		//배치관련된 객체 포함해서 디자인과 직접적인 관련이 없는 api는 여전이 awt를 사용
 		frame.setLayout(new FlowLayout());
-		//조립
-		frame.add(bt);
-		frame.add(t);
+	
 		
 		//프레임 보이게
 		frame.setVisible(true);
