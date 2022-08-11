@@ -1,4 +1,4 @@
-package com.aca.javaseapp0811.test;
+package com.aca.javaseapp0811.collection;
 
 import java.awt.Button;
 import java.awt.Color;
