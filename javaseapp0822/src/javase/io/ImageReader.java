@@ -10,6 +10,7 @@
  */
 package javase.io;
 
+import java.io.BufferedReader;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
@@ -18,7 +19,7 @@ import java.io.IOException;
 public class ImageReader {
 	FileInputStream fis;//파일을 대상으로 데이터를 읽어오는 바이트 기반 스트림
 	FileReader reader;//파일을 대상으로 데이터를 읽어오되, 2byte를 하나의 문자로 읽을 수 있는 스트림 
-	
+
 	public ImageReader(){
 		try {
 			fis = new FileInputStream("Z:/SLAcademy/javaSE_workspace/javaseapp0822/data/memo.txt");//바이트기반 스트림
