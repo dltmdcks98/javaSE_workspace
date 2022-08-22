@@ -8,7 +8,7 @@ public class ImageReader {
 	
 	public ImageReader(){
 		try {
-			fls = new FileInputStream("파일경로");
+			fls = new FileInputStream("Z:/SLAcademy/javaSE_workspace/javaseapp0822/images/2.png");
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
