@@ -2,6 +2,7 @@ package javaseapp0823.io;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
@@ -25,6 +26,7 @@ public class Memeoapp extends JFrame{
 	JFileChooser chooser;							//파일 탐색기
 	FileReader reader;								//파일을 대상으로 한 문자기반의 스트림, 복사가 목적이 아니라 데이터의 한글이 깨지면 안됨
 									
+	BufferedReader buffr;
 	
 	public Memeoapp() {
 		//부모의 생성자 접근
@@ -85,11 +87,23 @@ public class Memeoapp extends JFrame{
 			 File file = chooser.getSelectedFile();
 			 try {
 				reader = new FileReader(file);//유저가 파일을 선택한 시점에 해당파일에 빨대가 꽂아짐
+				buffr = new BufferedReader(reader);
 				
-				//한 문자 읽기 
-				int data =-1;
-				data = reader.read();
-				content.append(data+"");
+				//wrapper 클래스란? 자바의 모든 자료형마다 1:1 대응되는 클래스를 의미하며
+				//주 용도는 기본자료형과 객체자료형간 형변환 지원 하건, 자료형을 이용한 다양한 처리시 활용한다.
+				//실수 : float(4) -Float < double(8) - Double 
+				//정수 : byte(1)-Byte < short(2)-Short < int(4)-Integer < long(8)-Long
+				//문자 : char-Character 
+				//논리 : boolean-Boolean
+				
+				String data =null;//객체의 빈 값은 null
+				
+				while(true) {
+					data = buffr.readLine();//한 문자 읽기 
+					if(data==null)break;
+					content.append(data+"\n");//int형 데이터를 String으로 변환
+				}
+				
 				
 			} catch (FileNotFoundException e) {
 				// TODO Auto-generated catch block
@@ -97,6 +111,23 @@ public class Memeoapp extends JFrame{
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
+			}finally {
+				if(buffr!=null) {
+					try {
+						buffr.close();
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+				}
+				if(reader!=null) {
+					try {
+						reader.close();
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+				}
 			}
 		 }
 		 
@@ -104,7 +135,6 @@ public class Memeoapp extends JFrame{
 	
 	public static void main(String[] args) {
 		new Memeoapp();
-
 	}
 
 }
