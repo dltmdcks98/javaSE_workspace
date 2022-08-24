@@ -7,12 +7,12 @@ import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.image.BufferedImage;
 import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
@@ -20,6 +20,7 @@ import java.util.List;
 import javax.imageio.ImageIO;
 import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
 import org.json.simple.JSONArray;
@@ -39,7 +40,8 @@ public class Gallery extends JFrame {
 	FileReader reader;// 한문자씩 읽을 수 잇는 스트림
 	//BufferedReader buffr;//버퍼처리된 문자 기반 입력 스트림
 	List<Movie> movieList;
-	
+	BufferedImage img;//패널이 그리게 될 이미지 객체
+	int index=0;
 	public Gallery() {
 		
 
@@ -47,7 +49,8 @@ public class Gallery extends JFrame {
 		
 		init();
 		System.out.println("최종적으로 모여진 영화의 수"+movieList.size());
-		loadImage();
+		
+		loadImage(index);
 		
 		p_content = new JPanel(){//내부익명클래스
 			/*개발자가 컴포넌트를 그냥 사용하면  sun에서 정해놓은 그림을 이욯하게 되는데
@@ -59,7 +62,7 @@ public class Gallery extends JFrame {
 			public void paint(Graphics g) {
 				System.out.println("내그림");
 				
-				g.drawImage(image, 0, 0, 600, 500, p_controller);
+				g.drawImage(img, 0, 0, 600, 500, p_controller);
 			}
 		};
 		bt_prev = new JButton("이전");
@@ -95,6 +98,21 @@ public class Gallery extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				// TODO Auto-generated method stub
 				next();
+			}
+		});
+		bt_auto.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// 무한 루프가 걸리게 되므로, 메인스레드는 루프에 넣으면 안됨
+				//메인 쓰레드 대신 업무를 처리한 쓰레드로 처리
+				Thread thread = new Thread() {
+					@Override
+					public void run() {
+						auto();						
+					}
+				};
+				thread.start();
 			}
 		});
 		
@@ -150,13 +168,36 @@ public class Gallery extends JFrame {
 	
 	//다음 사진 나오게
 	public void next(){
-		
+		if(index<movieList.size()-1) {
+			index++;
+			loadImage(index);
+			//Panel의 그림을 프로그래밍적으로 다시 그리는 방법
+			//repaint() -> update() 화면을 모두 지우고 paint()생성
+			p_content.repaint();
+		}else {
+			JOptionPane.showMessageDialog(this, "마지막 이미지 입니다.");
+		}
 	}
-	public void loadImage() {
+	public void auto() {
+
+		while(true) {
+			try {
+				Thread.sleep(3000);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			next();
+		}
+	}
+	
+	//이 메서드를 호출하는 자는, 원하는 인덱스를 인수로 넘기면 된다.
+	public void loadImage(int index) {
 		//json 로컬 파일로부터 이미지 정보를 얻어와 image객체생성하기 
 		//data.json이 패키지 경로에 있을때 파일을 접근하는 방법
 //		URL url = this.getClass().getResource("/javaseapp0812/res/data.json");//일반파일인 경우에는 패키지는 .대신 /로 한다.
-		File file = new File("Z:/SLAcademy/javaSE_workspace/javaseapp0812/data/data.json");
+		/* DTO를 생성 하기 이전 코드 
+		 File file = new File("Z:/SLAcademy/javaSE_workspace/javaseapp0812/data/data.json");
 		FileReader reader = null;
 		
 		try {
@@ -185,6 +226,20 @@ public class Gallery extends JFrame {
 					e.printStackTrace();
 				}
 			}
+			*/
+		
+			Movie movie = movieList.get(index);//영화의 제목과 url을 얻는다.
+			
+			try {
+				URL url = new URL(movie.getUrl());
+				img =ImageIO.read(url);
+			} catch (MalformedURLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 
 		
@@ -198,7 +253,7 @@ public class Gallery extends JFrame {
 //			// TODO Auto-generated catch block
 //			e.printStackTrace();
 //		}
-	}
+//	}
 	public static void main(String[] args) {
 		new Gallery();
 	}
