@@ -7,6 +7,7 @@ import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -30,6 +31,9 @@ public class Gallery extends JFrame {
 	JButton bt_prev,bt_next,bt_auto;
 	Image image;//자바에서 이미지를 표현한 객체이고, 이미지 인스턴스를 얻는 방법은 상당히 다양하다
 //	URL url;
+	
+	FileReader reader;// 한문자씩 읽을 수 잇는 스트림
+	BufferedReader buffr;//버퍼처ㅣㄹ된 문자 기반 입력 스트림
 	
 	public Gallery() {
 		
@@ -92,6 +96,7 @@ public class Gallery extends JFrame {
 	public void init(){
 		//json은 파일로 존재하는데 실행중인 자바 프로그램에서 문서 파일을 읽어야 하므로,
 		//필요한 기술은 입력스트림이 필요하다.
+		
 	}
 	
 	

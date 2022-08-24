@@ -1,4 +1,3 @@
-
 package javaseapp0823.io;
 
 import java.awt.Color;
