@@ -14,6 +14,8 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.imageio.ImageIO;
 import javax.swing.JButton;
@@ -25,6 +27,8 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
+import javaseapp0812.domain.Movie;
+
 public class Gallery extends JFrame {
 	JPanel p_controller;
 	JPanel p_content;
@@ -33,13 +37,16 @@ public class Gallery extends JFrame {
 //	URL url;
 	
 	FileReader reader;// 한문자씩 읽을 수 잇는 스트림
-	BufferedReader buffr;//버퍼처ㅣㄹ된 문자 기반 입력 스트림
+	//BufferedReader buffr;//버퍼처리된 문자 기반 입력 스트림
+	List<Movie> movieList;
 	
 	public Gallery() {
 		
 
 		p_controller = new JPanel();
 		
+		init();
+		System.out.println("최종적으로 모여진 영화의 수"+movieList.size());
 		loadImage();
 		
 		p_content = new JPanel(){//내부익명클래스
@@ -96,6 +103,47 @@ public class Gallery extends JFrame {
 	public void init(){
 		//json은 파일로 존재하는데 실행중인 자바 프로그램에서 문서 파일을 읽어야 하므로,
 		//필요한 기술은 입력스트림이 필요하다.
+		try {
+			reader = new FileReader("Z:/SLAcademy/javaSE_workspace/javaseapp0812/data/data.json");
+			
+			//JSON 형식을 이해하고 해석할 수 있는 파서를 이용하여 data.json안에 표기된 데이터를 접근한다.
+			JSONParser jsonParser = new JSONParser();
+			JSONObject jsonObject = (JSONObject) jsonParser.parse(reader);//해석 수행
+			
+			JSONArray jsonArray=(JSONArray)jsonObject.get("marvel");
+			
+			//곧 닫히게될 스트림 및 죽게될 jsonArray를 대체하기 위해 
+			movieList = new ArrayList<Movie>();
+			for(int i=0;i<jsonArray.size();i++) {
+				JSONObject obj =(JSONObject) jsonArray.get(i);//영화 한편 추출
+				
+				Movie movie = new Movie();//영화가 20개면 20개가 만들어 져야해서 반복문 안에 작성
+				movie.setUrl((String)obj.get("url"));
+				movie.setTitle((String)obj.get("title"));
+				
+				//list에 담기
+				movieList.add(movie);
+			}
+			
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}finally {
+			if(reader!=null){
+				try {
+					reader.close();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+		}
 		
 	}
 	
