@@ -1,9 +1,11 @@
 package javaseapp0812.thread;
 
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.net.MalformedURLException;
+import java.net.URL;
 
 /*
  * 인터넷 상의 이미지를 나의 Pc로 저장
@@ -14,23 +16,43 @@ public class ImageCollector {
 	
 	
 	public ImageCollector() {
+		InputStream is = null;
 		try {
-			fis = new FileInputStream("https://images-na.ssl-images-amazon.com/images/I/91qvAndeVYL._RI_.jpg");
-			System.out.println("스트림 성공");
-		} catch (FileNotFoundException e) {
+			URL url = new URL("https://images-na.ssl-images-amazon.com/images/I/91qvAndeVYL._RI_.jpg");
+			is =url.openStream();
+			fos = new FileOutputStream("Z:/SLAcademy/javaSE_workspace/javaseapp0812/data/test.jpg");
+			//생성된 스트림을 이용하여 데이터 읽기
+			int data =-1;
+			while(true) {
+				data = is.read();//1byte 읽기
+				if(data==-1)break;
+				fos.write(data);
+				System.out.println(data);
+			}
+			System.out.println("수집완료");
+		} catch (MalformedURLException e) {
 			// TODO Auto-generated catch block
-			System.out.println("스트림 실패");
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}finally {
-			if(fis!=null) {
+			if(is!=null) {
 				try {
-					fis.close();
+					is.close();
 				} catch (IOException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 			}
-			
+			if(fos!=null) {
+				try {
+					fos.close();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
 		}
 	}
 
