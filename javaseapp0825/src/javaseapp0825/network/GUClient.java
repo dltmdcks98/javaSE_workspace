@@ -43,7 +43,7 @@ public class GUClient extends JFrame {
 		}
 	
 		//스타일
-		area.setPreferredSize(new Dimension(280,270));
+		scroll.setPreferredSize(new Dimension(280,270));
 		area.setBackground(Color.YELLOW);
 		
 		//조립
