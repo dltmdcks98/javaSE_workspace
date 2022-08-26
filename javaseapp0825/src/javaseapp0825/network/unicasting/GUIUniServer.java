@@ -28,8 +28,8 @@ public class GUIUniServer extends JFrame{
 	ServerSocket server;//접속자 감지용,통신연결용
 	boolean flag = true;//서버 가동 여부를 결정짓는 논리값
 	
-	BufferedReader buffr;
-	BufferedWriter buffw;
+//	BufferedReader buffr;
+//	BufferedWriter buffw;
 	
 	public GUIUniServer() {
 		t_port = new JTextField("9999",12);
@@ -80,12 +80,17 @@ public class GUIUniServer extends JFrame{
 				Socket socket = server.accept();//이 메소드에 의해 접속자가 발생할때까지 무한 대기
 				String ip = socket.getInetAddress().getHostAddress();
 				area.append(ip+"접속자 감지 \n");
-				buffr = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-				buffw = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
 				
-				String msg = buffr.readLine();
-				area.append(msg+"\n");
-				
+				//대화 코드는 별도의 스레드로 구현해야한다.
+//				buffr = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+//				buffw = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
+//				
+//				String msg = buffr.readLine();
+//				area.append(msg+"\n");
+					
+				//대화용 쓰레드를 생성하여, 대화를 나누도록 해준다.
+				ChatThread chatThread = new ChatThread(socket, this);
+				chatThread.start();//대화시작
 			}
 			
 		} catch (NumberFormatException e) {
