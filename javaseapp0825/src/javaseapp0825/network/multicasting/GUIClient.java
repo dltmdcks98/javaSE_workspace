@@ -1,4 +1,4 @@
-package javaseapp0825.network.unicasting;
+package javaseapp0825.network.multicasting;
 
 import java.awt.Choice;
 import java.awt.Color;
@@ -24,7 +24,7 @@ import javax.swing.JTextField;
 
 /*
  * telnet으로는 영문으로 명령어를 넣기 위해 만든 것*/
-public class GUClient extends JFrame {
+public class GUIClient extends JFrame {
 	Choice ch;//html의 select박스와 동일
 	JTextField t_port;
 	JButton bt_connection;
@@ -35,10 +35,9 @@ public class GUClient extends JFrame {
 	
 	int port=9999;
 	Socket socket;//통신용 소켓(데이터를 주고 받을 수 있다.)
-	BufferedReader buffr;
-	BufferedWriter buffw;
+	ClientThread clientThread;
 	
-	public GUClient() {
+	public GUIClient() {
 		ch = new Choice();
 		t_port = new JTextField(Integer.toString(port),6);
 		bt_connection = new JButton("접속");
@@ -87,9 +86,9 @@ public class GUClient extends JFrame {
 			public void keyReleased(KeyEvent e) {
 				if(e.getKeyCode()==KeyEvent.VK_ENTER) {//엔터치면~
 					//자바에서는 상수가 주로 사람이 이해하기 힘든 데이터의 경우 의미를 부여한 직관성을 부여한 단어을 이용하여 상수를 정의
-					send();
+					clientThread.send(t_input.getText());
 					t_input.setText("");//디자인은 신경쓰지 않도록 하기 위해 send()에서 정의 안함
-					listen();
+					
 				}
 			}
 		});
@@ -99,10 +98,11 @@ public class GUClient extends JFrame {
 	public void connect() {
 		try {
 			socket = new Socket(ch.getSelectedItem(),Integer.parseInt(t_port.getText()));
+			//접속이 성공되어있다면, 이 시점 부터는 대화가  가능해야 하므로 쓰레드로하여금 대화를 나누게하자
+			clientThread = new ClientThread(socket, this);//쓰레드 생성
+			clientThread.start();//대화 시작, 이 시점  부터는 listen을 실시간으로 시도하고 있다.
 			
-			//접속이 성공 되었다면 대화가 가능해야 하므로, 입출력 스트림을 Socket으로부터 뽑아낸다.
-			buffr = new BufferedReader(new InputStreamReader(socket.getInputStream()));//듣기용
-			buffw = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));//말하기용
+			
 		} catch (NumberFormatException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -116,32 +116,10 @@ public class GUClient extends JFrame {
 		
 	}
 	
-	//서버로부터 전송된 데이터를 받는다.
-	public void listen() {
-		try {
-			String msg = buffr.readLine();
-			area.append(msg+"\n");
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	}
-	
-	//출력 스트림을 이용하여 문자열을 출력
-	public void send() {
-		String msg = t_input.getText();
-		try {
-			buffw.write(msg+"\n");//문장의 끝임을 즉 버퍼의 한줄의 끝임을 알려줘야함
-			buffw.flush();//버퍼처리된 출력 스트림의 경우만
-			
-		
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	}
-	
+	/*
+
+	*/
 	public static void main(String[] args) {
-		new GUClient();
+		new GUIClient();
 	}
 }
