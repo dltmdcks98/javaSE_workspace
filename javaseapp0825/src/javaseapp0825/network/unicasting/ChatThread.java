@@ -32,12 +32,24 @@ public class ChatThread extends Thread{
 		}
 	}
 	
+	//클라이언트에게 말하기
+	public void send(String msg) {
+		try {
+			buffw.write(msg+"\n");
+			buffw.flush();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
 	//클라이언트의 말 듣기
 	public void listen() {
 		String msg = null;
 		
 		try {
 			msg = buffr.readLine();
+			send(msg);//듣자 마자 클라이언트로 보냄 
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
